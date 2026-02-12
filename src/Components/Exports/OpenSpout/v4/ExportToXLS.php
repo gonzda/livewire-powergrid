@@ -2,6 +2,7 @@
 
 namespace PowerComponents\LivewirePowerGrid\Components\Exports\OpenSpout\v4;
 
+use OpenSpout\Common\Entity\Cell;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Common\Entity\Style\{Color, Style};
 use OpenSpout\Common\Exception\IOException;
@@ -77,15 +78,21 @@ class ExportToXLS extends Export implements ExportInterface
             ->setBackgroundColor($this->striped);
 
         /** @var array<string> $row */
-        foreach ($data['rows'] as $key => $row) {
-            if (count($row)) {
-                if ($key % 2 && $this->striped) {
-                    $row = Row::fromValues($row, $gray);
-                } else {
-                    $row = Row::fromValues($row, $default);
-                }
-                $writer->addRow($row);
+        foreach ($data['rows'] as $key => $rowValues) {
+            if (!count($rowValues)) {
+                continue;
             }
+            $cells = [];
+            foreach ($rowValues as $value) {
+                if (is_numeric($value)) {
+                    $cells[] = Cell::fromValue((float) $value);
+                } else {
+                    $cells[] = Cell::fromValue((string) $value);
+                }
+            }
+            $style = ($key % 2 && $this->striped) ? $gray : $default;
+            $row = new Row($cells, $style);
+            $writer->addRow($row);
         }
 
         $writer->close();
