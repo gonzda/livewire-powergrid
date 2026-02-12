@@ -43,7 +43,7 @@ return [
         'contains_not' => 'No contiene',
         'starts_with' => 'Comienza por',
         'ends_with' => 'Termina en',
-        'is_null' => 'És nulo',
+        'is_null' => 'Es nulo',
         'is_not_null' => 'No es nulo',
         'is_blank' => 'Es blanco',
         'is_not_blank' => 'No es blanco',
